@@ -1,0 +1,1322 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Sokongan Haiwan di Sekelilingku: Rangka Dalam, Luar &amp; Hidrostatik — Sains Tingkatan 4</title>
+  <meta name="color-scheme" content="only light">
+  <!-- Pustaka AR Kad (wajib sebelum skrip lain) -->
+  <script src="https://nazatulainiabdmajid.github.io/DidikARealiti_AI/ar-kad.js"></script>
+  <!-- Pustaka AI Adaptif berasaskan logik kabur -->
+  <script src="https://nazatulainiabdmajid.github.io/DidikARealiti_AI/ai-adaptif.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+  <style>
+    /* Susun atur asal template jawi_2.html: bar fasa Kolb melekat di atas; setiap fasa satu panel. Warna fasa ikut kitaran Kolb. */
+    :root{
+      color-scheme: only light;
+      --paper:#F4F6F1; --card:#FFFFFF; --ink:#1B2430; --muted:#5B6675; --line:#D9DED3; --soft:#ECEFE7;
+      --ce:#D9480F; --ce-soft:#FFE8DC; --ro:#6741D9; --ro-soft:#ECE5FF; --ac:#1864AB; --ac-soft:#E1EEFB; --ae:#2B8A3E; --ae-soft:#E3F4E6;
+      --ar:#0B7285; --ai:#C2255C; --ps:#B35C00;
+      --ok:#2B8A3E; --bad:#C92A2A;
+      --f-d:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif; --f-b:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+    }
+    *{box-sizing:border-box}
+    [hidden]{display:none!important}
+    html,body{background:var(--paper);color:var(--ink)}
+    body{margin:0;font-family:var(--f-b);font-size:16.5px;line-height:1.55;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+    body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--card)}
+    .wrap{max-width:1040px;margin:0 auto}
+    h1,h2,h3{font-family:var(--f-d);margin:0;line-height:1.15;text-wrap:balance}
+    h1{font-size:clamp(26px,5vw,40px);font-weight:800} h2{font-size:clamp(22px,3.4vw,28px);font-weight:800} h3{font-size:18px;font-weight:600}
+    p{margin:0} .muted{color:var(--muted)}
+    button{font:inherit;cursor:pointer}
+    :focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+
+    /* Bar atas melekat */
+    .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--card);border-bottom:1px solid var(--line);margin-inline:calc(-1*max(16px,env(safe-area-inset-left,0px)));padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px))}
+    .top .wrap{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .brand{font-family:var(--f-d);font-weight:800;margin-right:auto}
+    .ph{display:flex;gap:6px;flex-wrap:wrap}
+    .phb{border:2px solid var(--line);background:var(--card);border-radius:999px;padding:4px 12px 4px 5px;display:flex;gap:6px;align-items:center;font-size:14px;font-weight:700;color:var(--ink)}
+    .phb .n{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:12.5px}
+    .phb[data-p="0"] .n{background:var(--ce)}.phb[data-p="1"] .n{background:var(--ro)}.phb[data-p="2"] .n{background:var(--ac)}.phb[data-p="3"] .n{background:var(--ae)}
+    .phb[aria-current="true"]{border-color:var(--ink)}
+    .phb.done::after{content:"✓";color:var(--ok);font-weight:800}
+    @media (max-width:520px){.brand{display:none}.phb{padding:3px 9px 3px 4px;font-size:13px}.phb .n{width:19px;height:19px}}
+    .stars{font-weight:800;color:var(--ps);font-variant-numeric:tabular-nums}
+    #badges{cursor:pointer}
+
+    main{padding-block:22px 40px;display:flex;flex-direction:column;gap:18px}
+    .hero{display:flex;flex-direction:column;gap:8px}
+    .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px;border-top:6px solid var(--c,var(--ink))}
+    .panel[data-p="0"]{--c:var(--ce);--cs:var(--ce-soft)}.panel[data-p="1"]{--c:var(--ro);--cs:var(--ro-soft)}.panel[data-p="2"]{--c:var(--ac);--cs:var(--ac-soft)}.panel[data-p="3"]{--c:var(--ae);--cs:var(--ae-soft)}
+    .eyebrow{font-size:12.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+
+    /* Watak pemandu & Sokongan Dialog */
+    .guide{display:flex;gap:12px;align-items:flex-start;background:var(--cs,var(--soft));border-radius:14px;padding:12px 14px}
+    .guide .av{flex:none;width:46px;height:46px;border-radius:50%;background:var(--c,var(--ink));color:#fff;display:grid;place-items:center;font-family:var(--f-d);font-weight:800;font-size:18px}
+    .guide p{font-size:16px}
+    .guide b.who{display:block;font-size:13px;color:var(--muted);font-weight:700}
+    .sd{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:6px;padding:1px 7px;margin-right:4px;color:#fff;vertical-align:2px}
+    .sd-pencetus{background:#D9480F}.sd-peringatan{background:#6741D9}.sd-cadangan{background:#1864AB}.sd-pujian{background:#2B8A3E}.sd-ganjaran{background:#B35C00}
+    .sd-ai{background:#E5F3F6;color:#0B7285;border:1.5px solid #0B7285}
+
+    /* Butang & komponen umum */
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .btn{border:0;border-radius:12px;padding:10px 18px;font-weight:700;background:var(--c,var(--ink));color:#fff;display:inline-flex;align-items:center;gap:6px}
+    .btn.ghost{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}
+    .btn.sm{padding:6px 12px;font-size:14.5px}
+    .btn.big{font-size:18px;padding:14px 22px;border-radius:16px}
+    .btn:disabled{opacity:.45;cursor:not-allowed}
+    .mode2{display:flex;gap:10px;flex-wrap:wrap}
+    .mode2 .btn{flex:1 1 240px;justify-content:center}
+    .fb{border-radius:10px;padding:9px 12px;font-size:15.5px}
+    .fb.ok{background:#E3F4E6;color:var(--ok)}.fb.bad{background:#FFE3E3;color:var(--bad)}.fb.info{background:var(--soft)}
+    .card{border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0;background:#fff}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media (max-width:820px){.grid3{grid-template-columns:1fr}}
+    .opts{display:flex;gap:8px;flex-wrap:wrap}
+    .opt{border:2px solid var(--line);background:#fff;border-radius:10px;padding:6px 14px;color:var(--ink);font-weight:700}
+    .opt.right{border-color:var(--ok);background:#E3F4E6}.opt.wrong{border-color:var(--bad);background:#FFE3E3}
+    .opt.sel{border-color:var(--c);background:var(--cs)}
+    textarea,input[type=text],select{font:inherit;width:100%;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff;color:var(--ink)}
+    textarea{min-height:68px;resize:vertical}
+    .mic{border:2px solid var(--ai);color:var(--ai);background:#fff;border-radius:999px;padding:6px 14px;font-weight:700}
+    .mic.on{background:var(--ai);color:#fff}
+
+    /* Panel misi (daripada jawi_2.html) */
+    .mpanel{display:flex!important;flex-direction:column;gap:8px}
+    .mcur{border:2.5px solid var(--ce);background:var(--ce-soft);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+    .mcur.isdone,.mcur.all{border-color:var(--ok);background:#E3F4E6}
+    .mlab{font-size:12.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+    .mcur .mt{font-size:18px}
+    .mcur p{margin:0;font-size:15.5px}
+    .mdots{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+    .mdots button{font:inherit;font-weight:800;font-size:14px;min-width:44px;min-height:36px;border-radius:999px;border:2px solid var(--line);background:#fff;cursor:pointer}
+    .mdots button.done{border-color:var(--ok);background:#E3F4E6}
+    .mdots button.on{outline:3px solid var(--ce);outline-offset:1px}
+    .mdots span{font-size:14px;color:var(--muted);margin-left:4px}
+    .mlab2{display:block;font-size:12.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+    #tapMission{background:#FFF9DB;border-radius:10px;padding:8px 12px}
+
+    /* Koleksi kad & grid kad */
+    .found{display:flex;gap:8px;flex-wrap:wrap}
+    .found>span{border:1.5px solid var(--line);border-radius:10px;padding:4px 10px;background:#fff;font-weight:700;text-transform:capitalize}
+    .found>span.got{border-color:var(--ok);background:#E3F4E6}
+    .tag-jenis{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:800;color:#fff;text-transform:uppercase}
+    .tag-rangka_dalam{background:#1864AB}.tag-rangka_luar{background:#D9480F}.tag-rangka_hidrostatik{background:#0B7285}
+    .cards-tap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+    .tap-card-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px;border:2px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font-weight:700;text-transform:capitalize}
+    .tap-card-btn.got{border-color:var(--ok);background:#E3F4E6}
+    .tap-card-btn img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;background:#f8fafc}
+    .tap-card-fallback{width:100%;aspect-ratio:1;display:grid;place-items:center;font-size:44px;background:var(--soft);border-radius:8px}
+
+    /* Fasa 3 & Fasa 4 */
+    .qaras{display:inline-block;border-radius:999px;padding:2px 10px;font-weight:800;font-size:13px}
+    .qaras.a1{background:#D3F9D8;color:#2B8A3E}.qaras.a2{background:#FFF3BF;color:#8a6100}.qaras.a3{background:#FFE3E3;color:#C92A2A}
+    .chal{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+    .chal button{text-align:left;border:2px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;color:var(--ink);display:flex;flex-direction:column;gap:2px}
+    .chal button[aria-pressed="true"]{border-color:var(--ae);background:var(--ae-soft)}
+    .chal button.rec{box-shadow:0 0 0 3px rgba(43,138,62,.25)}
+    .chal button small{color:var(--muted);font-size:13.5px}
+    .chal button.done{border-color:var(--ok)}
+    .chal button.done b::after{content:" ✓";color:var(--ok)}
+    .sort-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:10px;background:var(--soft);border-radius:10px}
+    .sort-row strong{text-transform:capitalize}
+    .sort-row select{width:auto;min-width:170px;max-width:100%}
+    .evidence{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+    .evidence div{border-radius:12px;background:var(--soft);padding:10px;text-align:center}
+    .evidence b{display:block;font-family:var(--f-d);font-size:26px}
+
+    /* Bar atas butang mula semula & navigasi bawah panel */
+    .home{display:inline-flex;align-items:center;gap:4px;font-weight:800;font-size:14.5px;text-decoration:none;color:var(--ink);border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:5px 12px;white-space:nowrap;cursor:pointer;font-family:inherit}
+    .home.warn{border-color:#C92A2A;color:#C92A2A;background:#FFF5F5}
+    .home:hover,.home:focus-visible{border-color:var(--ink)}
+    .pnav{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;border-top:1.5px dashed var(--line);margin-top:6px;padding-top:14px}
+    .pnav .sp{flex:1}
+
+    /* Toast & Footer kredit */
+    .toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:12px;font-weight:700;opacity:0;transition:all .3s;z-index:50;max-width:90vw;text-align:center;pointer-events:none}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .credit{max-width:1100px;margin:28px auto 0;padding:18px 16px 26px;border-top:1.5px solid var(--line,#D9DED3);text-align:center;font-size:13.5px;line-height:1.55;color:var(--muted,#5C6670)}
+    .credit p{margin:3px 0}.credit b{color:var(--ink,#1B2430)}
+    .credit a{color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:2px}
+    .bAR{color:#D9480F}.bAI{color:#1864AB}
+    @media print{body *{visibility:hidden}#printArea,#printArea *{visibility:visible}#printArea{position:absolute;left:0;top:0;width:100%}}
+    @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  </style>
+</head>
+<body>
+
+  <!-- BAR ATAS -->
+  <div class="top">
+    <div class="wrap">
+      <button class="home" id="resetAll" type="button" data-key="sokongan-haiwan-ar-v1" title="Padam kemajuan dan mula semula">🔄 Mula semula</button>
+      <span class="brand">Sokongan Haiwan</span>
+      <nav class="ph" aria-label="Fasa Kolb">
+        <button class="phb" data-p="0" aria-current="true"><span class="n">1</span>Alami</button>
+        <button class="phb" data-p="1"><span class="n">2</span>Renung</button>
+        <button class="phb" data-p="2"><span class="n">3</span>Faham</button>
+        <button class="phb" data-p="3"><span class="n">4</span>Cuba</button>
+      </nav>
+      <span class="stars" id="stars">★ 0</span>
+      <span class="stars" id="badges" title="Lencana">🏅 0</span>
+    </div>
+  </div>
+
+  <main class="wrap" id="app">
+    <header class="hero">
+      <span class="muted" style="font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:13px">Sains · Tingkatan 4 · Sistem Sokongan Haiwan</span>
+      <h1>Sokongan Haiwan di Sekelilingku: Rangka Dalam, Luar &amp; Hidrostatik</h1>
+      <p class="muted">Teroka dahulu, analisis kemudian. Aplikasi ini membimbing anda melalui empat fasa pembelajaran Kolb: alami, renung, faham dan cuba.</p>
+    </header>
+
+    <!-- ================= FASA 1: ALAMI ================= -->
+    <section class="panel" data-p="0" id="p0">
+      <span class="eyebrow">Fasa 1 · Alami (pengalaman konkrit)</span>
+      <div class="guide">
+        <span class="av" aria-hidden="true">DH</span>
+        <p><b class="who">Dr. Hana · Ahli Zoologi / Mentor Makmal Sains</b><span id="g0">Selamat datang ke makmal penerokaan. Teroka 6 kad haiwan melalui imbasan kamera AR atau klik gambar kad untuk mengenal pasti struktur dan sistem sokongan haiwan. Ikut 3 misi di bawah secara berurutan.</span></p>
+      </div>
+
+      <!-- Dua butang mula wajib -->
+      <div class="mode2">
+        <button class="btn big" id="tapBtn" type="button">✋ Tanpa kamera: klik gambar kad</button>
+        <button class="btn big" style="--c:var(--ar)" id="startBtn" type="button">📷 Dengan kamera: imbas kad (AR)</button>
+      </div>
+
+      <!-- 3 misi berurutan -->
+      <div class="missions" id="missions"></div>
+
+      <!-- Mod klik tanpa kamera -->
+      <div class="card" id="tapWrap" hidden>
+        <h3>Mod tanpa kamera</h3>
+        <p id="tapMission" style="font-weight:700"></p>
+        <div class="cards-tap-grid" id="tapGrid"></div>
+        <div id="tapShow" style="margin-top:8px"></div>
+      </div>
+
+      <!-- Koleksi kad -->
+      <div class="card">
+        <h3>Koleksi kad haiwan anda</h3>
+        <div class="found" id="found"></div>
+        <p class="muted" id="summary" style="font-size:14.5px"></p>
+      </div>
+
+      <!-- Bahagian Kad untuk dicetak (guru) menggunakan ArKad.paparKad -->
+      <details class="card" id="printArea">
+        <summary style="font-weight:700;cursor:pointer">Kad untuk dicetak (guru)</summary>
+        <p class="muted" style="font-size:14.5px">Cetak kad penanda di bawah dan imbas dengan butang <b>📷 Dengan kamera: imbas kad (AR)</b>.</p>
+        <div id="cards"></div>
+        <div class="row"><button class="btn ghost sm" type="button" onclick="window.print()">🖨️ Cetak kad</button></div>
+      </details>
+    </section>
+
+    <!-- ================= FASA 2: RENUNG ================= -->
+    <section class="panel" data-p="1" id="p1" hidden>
+      <span class="eyebrow">Fasa 2 · Renung (pemerhatian reflektif)</span>
+      <div class="guide">
+        <span class="av" aria-hidden="true">DH</span>
+        <p><b class="who">Dr. Hana · Ahli Zoologi / Mentor Makmal Sains</b><span id="g1">Mari analisis pemerhatian anda daripada 6 kad haiwan tadi. Jawab 3 soalan berpandu dan rumuskan dalam satu ayat menggunakan papan kekunci atau mikrofon.</span></p>
+      </div>
+
+      <div class="card">
+        <h3>Kad yang telah dikumpul</h3>
+        <div class="found" id="roFound"></div>
+      </div>
+
+      <div class="card">
+        <h3>Soalan 1 · Apa yang berubah apabila haiwan berangka luar (seperti ketam dan serangga) hendak membesar?</h3>
+        <textarea id="roQ1" placeholder="Tulis jawapan anda atau tekan 🎤 Cakap..."></textarea>
+        <div class="row">
+          <button class="mic" id="roMic1" type="button">🎤 Cakap</button>
+          <button class="btn sm" id="roChk1" type="button">✓ Semak</button>
+          <span class="muted" id="roStat1" style="font-size:14px"></span>
+        </div>
+        <div id="roFb1"></div>
+      </div>
+
+      <div class="card">
+        <h3>Soalan 2 · Apa yang berubah apabila tekanan bendalir bertindak ke semua arah di dalam rongga badan cacing tanah atau obor-obor?</h3>
+        <textarea id="roQ2" placeholder="Tulis jawapan anda atau tekan 🎤 Cakap..."></textarea>
+        <div class="row">
+          <button class="mic" id="roMic2" type="button">🎤 Cakap</button>
+          <button class="btn sm" id="roChk2" type="button">✓ Semak</button>
+          <span class="muted" id="roStat2" style="font-size:14px"></span>
+        </div>
+        <div id="roFb2"></div>
+      </div>
+
+      <div class="card">
+        <h3>Soalan 3 · Apa yang berubah pada struktur sokongan apabila kita membandingkan haiwan vertebrata (kucing, ikan) dengan kebanyakan invertebrata (ketam, serangga)?</h3>
+        <textarea id="roQ3" placeholder="Tulis jawapan anda atau tekan 🎤 Cakap..."></textarea>
+        <div class="row">
+          <button class="mic" id="roMic3" type="button">🎤 Cakap</button>
+          <button class="btn sm" id="roChk3" type="button">✓ Semak</button>
+          <span class="muted" id="roStat3" style="font-size:14px"></span>
+        </div>
+        <div id="roFb3"></div>
+      </div>
+
+      <div class="card">
+        <h3>Rumuskan dalam satu ayat</h3>
+        <p class="muted" style="font-size:14.5px">Tulis atau sebutkan satu ayat rumusan tentang tiga jenis sistem sokongan haiwan dan fungsinya.</p>
+        <textarea id="roText" placeholder="Sistem sokongan haiwan terdiri daripada ... (tulis, atau tekan 🎤 Cakap)"></textarea>
+        <div class="row">
+          <button class="mic" id="roMic" type="button">🎤 Cakap</button>
+          <button class="btn sm" id="roCheck" type="button">✓ Semak refleksi</button>
+          <span class="muted" id="roMicStat" style="font-size:14px"></span>
+        </div>
+        <div id="roTxtFb"></div>
+      </div>
+
+      <div class="row"><button class="btn" data-go="2" type="button">Teruskan ke Faham</button></div>
+    </section>
+
+    <!-- ================= FASA 3: FAHAM ================= -->
+    <section class="panel" data-p="2" id="p2" hidden>
+      <span class="eyebrow">Fasa 3 · Faham (konsep abstrak)</span>
+      <div class="guide">
+        <span class="av" aria-hidden="true">DH</span>
+        <p><b class="who">Dr. Hana · Ahli Zoologi / Mentor Makmal Sains</b><span id="g2">Mari namakan ketiga-tiga sistem sokongan haiwan daripada kad anda, latih sebutan istilah sains, dan uji penguasaan melalui Kuiz AI Adaptif.</span></p>
+      </div>
+
+      <div class="fb info">
+        <b>Fungsi Umum Sistem Sokongan:</b> Menyokong berat badan, mengekalkan bentuk badan, melindungi organ dalaman, dan membantu pergerakan.
+      </div>
+
+      <div class="grid3">
+        <div class="card">
+          <h3>🦴 Konsep 1: Rangka Dalam</h3>
+          <p><b>Kad:</b> Kucing, Ikan <i>(contoh lain dalam nota: manusia, burung, katak)</i>.</p>
+          <p><b>Struktur:</b> Terbina daripada <b>tulang atau rawan</b> di dalam badan; dimiliki oleh semua <b>vertebrata</b>.</p>
+          <p><b>Fungsi:</b> Menyokong berat badan, melindungi organ dalaman, mengekalkan bentuk badan, dan menjadi <b>tapak perlekatan otot</b>.</p>
+        </div>
+        <div class="card">
+          <h3>🦀 Konsep 2: Rangka Luar</h3>
+          <p><b>Kad:</b> Ketam, Serangga <i>(contoh lain dalam nota: udang, labah-labah)</i>.</p>
+          <p><b>Struktur:</b> Lapisan luar keras daripada <b>kitin atau cangkerang</b>; dimiliki kebanyakan <b>invertebrata</b>.</p>
+          <p><b>Pertumbuhan:</b> Mengalami <b>ekdisis (salin kulit)</b> kerana rangka luar keras mengehadkan pembesaran badan.</p>
+        </div>
+        <div class="card">
+          <h3>🪱 Konsep 3: Rangka Hidrostatik</h3>
+          <p><b>Kad:</b> Cacing tanah, Obor-obor <i>(contoh lain dalam nota: lintah)</i>.</p>
+          <p><b>Struktur:</b> <b>Bendalir</b> terkurung dalam <b>rongga badan</b> yang dikelilingi <b>dinding berotot</b>; dimiliki haiwan berbadan lembut.</p>
+          <p><b>Mekanisme:</b> <b>Tekanan bendalir</b> ke semua arah menjadikan <b>badan tegar</b> untuk mengekalkan bentuk dan membantu pergerakan.</p>
+        </div>
+      </div>
+
+      <!-- Latihan sebutan / ejaan istilah (Web Speech API + taip) -->
+      <div class="card">
+        <h3>Sebut dan semak istilah sains</h3>
+        <p class="muted" style="font-size:14.5px">Pilih satu istilah sasaran daripada jadual konsep, kemudian sebut menggunakan mikrofon atau taip dan tekan <b>Semak istilah</b>.</p>
+        <div class="opts" id="termOpts"></div>
+        <input type="text" id="termInput" placeholder="Sebut atau taip istilah sasaran di sini...">
+        <div class="row">
+          <button class="mic" id="readBtn" type="button">🎤 Sebut sekarang</button>
+          <button class="btn sm" id="termCheckBtn" type="button">✓ Semak istilah</button>
+          <span class="muted" id="readStat" style="font-size:14px"></span>
+        </div>
+        <div id="readFb"></div>
+      </div>
+
+      <!-- Kuiz AI Adaptif (elemen kosong diisi oleh AIAdaptif.kuiz) -->
+      <div class="card">
+        <h3>🤖 Kuiz AI Adaptif (8 Soalan)</h3>
+        <div id="kuizAI"></div>
+      </div>
+
+      <div class="row"><button class="btn" data-go="3" type="button">Teruskan ke Cuba</button></div>
+    </section>
+
+    <!-- ================= FASA 4: CUBA ================= -->
+    <section class="panel" data-p="3" id="p3" hidden>
+      <span class="eyebrow">Fasa 4 · Cuba (uji kaji aktif)</span>
+      <div class="guide">
+        <span class="av" aria-hidden="true">DH</span>
+        <p><b class="who">Dr. Hana · Ahli Zoologi / Mentor Makmal Sains</b><span id="g3">Aplikasikan unsur daripada 6 kad haiwan untuk meramal dan menguji 3 situasi baharu. Buat ramalan dahulu, kemudian tekan Uji &amp; Semak.</span></p>
+      </div>
+
+      <div class="fb info" id="cubaSuggest"></div>
+
+      <!-- Pilihan 3 cabaran -->
+      <div class="chal" id="cubaTabs">
+        <button type="button" data-c="1" aria-pressed="true"><b>Situasi 1 · Mudah</b><small>Pengelasan 6 kad haiwan</small></button>
+        <button type="button" data-c="2" aria-pressed="false"><b>Situasi 2 · Sederhana</b><small>Profil haiwan baharu (Burung, Labah-labah, Lintah)</small></button>
+        <button type="button" data-c="3" aria-pressed="false"><b>Situasi 3 · Sukar</b><small>Detektif Sains: Uji pernyataan &amp; kad bukti</small></button>
+      </div>
+
+      <!-- Situasi 1 (Mudah) -->
+      <div class="card" id="cuba1">
+        <h3>Situasi 1 (Mudah) · Pengelasan 6 Kad Haiwan</h3>
+        <p class="muted" style="font-size:14.5px"><b>Ramal dahulu:</b> Susun kesemua 6 kad haiwan ke dalam kategori <i>Rangka Dalam</i>, <i>Rangka Luar</i>, atau <i>Rangka Hidrostatik</i>, kemudian tekan <b>Uji &amp; Semak</b>.</p>
+        <div id="cuba1Rows" style="display:flex;flex-direction:column;gap:8px"></div>
+        <div class="row">
+          <button class="btn ghost sm" type="button" id="c1Hint">💡 Petunjuk</button>
+          <button class="btn" type="button" id="c1Check">🧪 Uji &amp; Semak</button>
+        </div>
+        <div id="c1Fb"></div>
+      </div>
+
+      <!-- Situasi 2 (Sederhana) -->
+      <div class="card" id="cuba2" hidden>
+        <h3>Situasi 2 (Sederhana) · Padanan Profil Haiwan Baharu daripada Nota</h3>
+        <p class="muted" style="font-size:14.5px"><b>Ramal dahulu:</b> Menggunakan unsur struktur dan ciri daripada kad, ramalkan jenis sistem sokongan dan ciri utama bagi <b>Burung</b>, <b>Labah-labah</b>, dan <b>Lintah</b>, kemudian tekan <b>Uji &amp; Semak</b>.</p>
+        <div class="sort-row">
+          <span><b>1. 🐦 Burung</b></span>
+          <div class="row">
+            <select id="c2aType">
+              <option value="">-- Sistem sokongan --</option>
+              <option value="rangka_dalam">Rangka Dalam</option>
+              <option value="rangka_luar">Rangka Luar</option>
+              <option value="rangka_hidrostatik">Rangka Hidrostatik</option>
+            </select>
+            <select id="c2aFeat">
+              <option value="">-- Ciri utama --</option>
+              <option value="tulang">Tulang atau rawan; tapak perlekatan otot</option>
+              <option value="kitin">Lapisan luar keras kitin/cangkerang; mengalami ekdisis</option>
+              <option value="bendalir">Tekanan bendalir dalam rongga badan menjadikan badan tegar</option>
+            </select>
+          </div>
+        </div>
+        <div class="sort-row">
+          <span><b>2. 🕷️ Labah-labah</b></span>
+          <div class="row">
+            <select id="c2bType">
+              <option value="">-- Sistem sokongan --</option>
+              <option value="rangka_dalam">Rangka Dalam</option>
+              <option value="rangka_luar">Rangka Luar</option>
+              <option value="rangka_hidrostatik">Rangka Hidrostatik</option>
+            </select>
+            <select id="c2bFeat">
+              <option value="">-- Ciri utama --</option>
+              <option value="tulang">Tulang atau rawan; tapak perlekatan otot</option>
+              <option value="kitin">Lapisan luar keras kitin/cangkerang; mengalami ekdisis</option>
+              <option value="bendalir">Tekanan bendalir dalam rongga badan menjadikan badan tegar</option>
+            </select>
+          </div>
+        </div>
+        <div class="sort-row">
+          <span><b>3. 🪱 Lintah</b></span>
+          <div class="row">
+            <select id="c2cType">
+              <option value="">-- Sistem sokongan --</option>
+              <option value="rangka_dalam">Rangka Dalam</option>
+              <option value="rangka_luar">Rangka Luar</option>
+              <option value="rangka_hidrostatik">Rangka Hidrostatik</option>
+            </select>
+            <select id="c2cFeat">
+              <option value="">-- Ciri utama --</option>
+              <option value="tulang">Tulang atau rawan; tapak perlekatan otot</option>
+              <option value="kitin">Lapisan luar keras kitin/cangkerang; mengalami ekdisis</option>
+              <option value="bendalir">Tekanan bendalir dalam rongga badan menjadikan badan tegar</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <button class="btn ghost sm" type="button" id="c2Hint">💡 Petunjuk</button>
+          <button class="btn" type="button" id="c2Check">🧪 Uji &amp; Semak</button>
+        </div>
+        <div id="c2Fb"></div>
+      </div>
+
+      <!-- Situasi 3 (Sukar) -->
+      <div class="card" id="cuba3" hidden>
+        <h3>Situasi 3 (Sukar) · Detektif Sains: Uji Pernyataan &amp; Pilih Kad Bukti</h3>
+        <p class="muted" style="font-size:14.5px"><b>Ramal dahulu:</b> Tentukan sama ada setiap pernyataan <b>Benar</b> atau <b>Palsu</b> dan pilih <b>kad bukti</b> daripada 6 kad untuk menyokong jawapan anda, kemudian tekan <b>Uji &amp; Semak</b>.</p>
+        <div class="sort-row">
+          <span><b>Kes A:</b> "Ketam boleh membesar tanpa menyalin kulit kerana cangkerangnya membesar bersama badan."</span>
+          <div class="row">
+            <select id="c3aTf"><option value="">Benar / Palsu?</option><option value="benar">Benar</option><option value="palsu">Palsu</option></select>
+            <select id="c3aEv"><option value="">Kad bukti?</option><option value="ketam_serangga">Kad Ketam / Serangga</option><option value="kucing_ikan">Kad Kucing &amp; Ikan</option><option value="obor_cacing">Kad Obor-obor / Cacing tanah</option></select>
+          </div>
+        </div>
+        <div class="sort-row">
+          <span><b>Kes B:</b> "Obor-obor tidak mempunyai tulang, jadi ia tidak mempunyai sebarang sistem sokongan."</span>
+          <div class="row">
+            <select id="c3bTf"><option value="">Benar / Palsu?</option><option value="benar">Benar</option><option value="palsu">Palsu</option></select>
+            <select id="c3bEv"><option value="">Kad bukti?</option><option value="ketam_serangga">Kad Ketam / Serangga</option><option value="kucing_ikan">Kad Kucing &amp; Ikan</option><option value="obor_cacing">Kad Obor-obor / Cacing tanah</option></select>
+          </div>
+        </div>
+        <div class="sort-row">
+          <span><b>Kes C:</b> "Ikan dan kucing kedua-duanya merupakan vertebrata yang mempunyai rangka dalam sebagai tapak perlekatan otot."</span>
+          <div class="row">
+            <select id="c3cTf"><option value="">Benar / Palsu?</option><option value="benar">Benar</option><option value="palsu">Palsu</option></select>
+            <select id="c3cEv"><option value="">Kad bukti?</option><option value="ketam_serangga">Kad Ketam / Serangga</option><option value="kucing_ikan">Kad Kucing &amp; Ikan</option><option value="obor_cacing">Kad Obor-obor / Cacing tanah</option></select>
+          </div>
+        </div>
+        <div class="row">
+          <button class="btn ghost sm" type="button" id="c3Hint">💡 Petunjuk</button>
+          <button class="btn" type="button" id="c3Check">🧪 Uji &amp; Semak</button>
+        </div>
+        <div id="c3Fb"></div>
+      </div>
+
+      <!-- Bukti pembelajaran -->
+      <div class="card">
+        <h3>Bukti: pengalaman menjadi pengetahuan</h3>
+        <div class="evidence">
+          <div><b id="evCards">0/6</b>kad diteroka</div>
+          <div><b id="evRef">0/4</b>renungan disemak</div>
+          <div><b id="evRead">0</b>istilah disebut tepat</div>
+          <div><b id="evCuba">0/3</b>situasi Cuba selesai</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- FOOTER KREDIT WAJIB -->
+  <footer class="credit" role="contentinfo">
+    <p><b>Didik<span class="bAR">AR</span>ealiti <span class="bAI">AI</span></b>: Simulator AR dan AI menerusi kitaran pembelajaran berasaskan pengalaman</p>
+    <p>Berdasarkan template DidikARealiti AI © 2026 FTSM, Universiti Kebangsaan Malaysia (CC BY-NC-SA 4.0)</p>
+    <p><b>Diadaptasi oleh [nama guru, sekolah]</b></p>
+  </footer>
+
+  <script>
+    const $ = s => document.querySelector(s), $$ = s => Array.from(document.querySelectorAll(s));
+
+    /* =====================================================================
+       SENARAI 6 KAD HAIWAN (WORDS) — MENGIKUT JADUAL PERANCANGAN TINGKATAN 4
+       ===================================================================== */
+    const WORDS = [
+      {
+        nama: "Kucing",
+        info: "Rangka Dalam (Vertebrata): Terbina daripada tulang atau rawan di dalam badan; menyokong berat badan, melindungi organ dalaman, mengekalkan bentuk badan, dan menjadi tapak perlekatan otot.",
+        jenis: "rangka_dalam",
+        labelJenis: "Rangka Dalam",
+        ekdisis: false,
+        emoji: "🐱"
+      },
+      {
+        nama: "Ikan",
+        info: "Rangka Dalam (Vertebrata): Terbina daripada tulang atau rawan di dalam badan; menyokong berat badan, melindungi organ dalaman, mengekalkan bentuk badan, dan menjadi tapak perlekatan otot.",
+        jenis: "rangka_dalam",
+        labelJenis: "Rangka Dalam",
+        ekdisis: false,
+        emoji: "🐟"
+      },
+      {
+        nama: "Ketam",
+        info: "Rangka Luar (Invertebrata): Lapisan luar keras daripada kitin atau cangkerang; mengalami ekdisis (salin kulit) kerana rangka luar keras mengehadkan pembesaran badan.",
+        jenis: "rangka_luar",
+        labelJenis: "Rangka Luar",
+        ekdisis: true,
+        emoji: "🦀"
+      },
+      {
+        nama: "Serangga",
+        info: "Rangka Luar (Invertebrata): Lapisan luar keras daripada kitin atau cangkerang; mengalami ekdisis (salin kulit) kerana rangka luar keras mengehadkan pembesaran badan.",
+        jenis: "rangka_luar",
+        labelJenis: "Rangka Luar",
+        ekdisis: true,
+        emoji: "🪲"
+      },
+      {
+        nama: "Cacing tanah",
+        info: "Rangka Hidrostatik (Haiwan berbadan lembut): Bendalir terkurung dalam rongga badan dikelilingi dinding berotot; tekanan bendalir ke semua arah menjadikan badan tegar untuk mengekalkan bentuk dan membantu pergerakan.",
+        jenis: "rangka_hidrostatik",
+        labelJenis: "Rangka Hidrostatik",
+        ekdisis: false,
+        emoji: "🪱"
+      },
+      {
+        nama: "Obor-obor",
+        info: "Rangka Hidrostatik (Haiwan berbadan lembut): Bendalir terkurung dalam rongga badan dikelilingi dinding berotot; tekanan bendalir ke semua arah menjadikan badan tegar untuk mengekalkan bentuk dan membantu pergerakan.",
+        jenis: "rangka_hidrostatik",
+        labelJenis: "Rangka Hidrostatik",
+        ekdisis: false,
+        emoji: "🪼"
+      }
+    ];
+
+    const PRAISE = ["Tepat sekali!", "Cemerlang!", "Analisis yang mantap!", "Syabas!", "Bagus sekali!"];
+    const pr = () => PRAISE[Math.floor(Math.random() * PRAISE.length)];
+
+    /* Keadaan aplikasi dalam localStorage */
+    const KEY = "sokongan-haiwan-ar-v1";
+    let S = {};
+    try { S = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { S = {}; }
+    S.found = S.found || [];
+    S.ekdisisFound = S.ekdisisFound || [];
+    S.stars = S.stars || 0;
+    S.badges = S.badges || [];
+    S.phase = S.phase || 0;
+    S.done = S.done || {};
+    S.mis = S.mis || {};
+    S.roDone = S.roDone || {};
+    S.roVal = S.roVal || {};
+    S.termsOk = S.termsOk || [];
+    S.cubaDone = S.cubaDone || {};
+    S.cuba1Pick = S.cuba1Pick || {};
+    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+
+    /* Toast ringkas */
+    let tT;
+    function toast(t) {
+      const e = $("#toast");
+      e.textContent = t;
+      e.classList.add("show");
+      clearTimeout(tT);
+      tT = setTimeout(() => e.classList.remove("show"), 2600);
+    }
+
+    function star(n) {
+      S.stars += n;
+      save();
+      $("#stars").textContent = "★ " + S.stars;
+    }
+
+    /* =====================================================================
+       SOKONGAN DIALOG (Oinas-Kukkonen & Harjumaa, 2009)
+       5 elemen berlabel warna: pencetus, peringatan, cadangan, pujian, ganjaran
+       ===================================================================== */
+    const SD_L = { pencetus: "Pencetus", peringatan: "Peringatan", cadangan: "Cadangan", pujian: "Pujian", ganjaran: "Ganjaran" };
+    const sdChip = t => `<span class="sd sd-${t}">${SD_L[t] || "Pencetus"}</span> `;
+    function sd(type, html) {
+      const t = ["pencetus", "peringatan", "cadangan", "pujian", "ganjaran"].includes(type) ? type : "pencetus";
+      const span = document.querySelector(`.panel:not([hidden]) .guide span[id]`);
+      if (span) span.innerHTML = sdChip(t) + html;
+    }
+
+    function badgeUI() {
+      $("#badges").textContent = "🏅 " + S.badges.length;
+    }
+    function award(name) {
+      if (S.badges.includes(name)) return;
+      S.badges.push(name);
+      save();
+      badgeUI();
+      sd("ganjaran", `Tahniah! Anda menerima lencana <b>${name}</b>.`);
+      toast("🏅 Ganjaran: lencana " + name);
+    }
+    $("#badges").onclick = () => toast(S.badges.length ? "Lencana anda: " + S.badges.join(", ") : "Belum ada lencana. Selesaikan misi dan cabaran untuk memperolehnya.");
+
+    /* Peringatan automatik selepas 25 saat tiada tindakan */
+    function sdIdle(getMsg) {
+      let last = Date.now(), sent = false;
+      ["pointerdown", "keydown", "input"].forEach(ev => document.addEventListener(ev, () => { last = Date.now(); sent = false; }, true));
+      setInterval(() => {
+        if (sent || document.hidden || Date.now() - last < 25000) return;
+        const m = getMsg();
+        if (!m) return;
+        sent = true;
+        sd("peringatan", m);
+        toast("Peringatan: " + m.replace(/<[^>]+>/g, ""));
+      }, 5000);
+    }
+
+    /* Semakan jawapan bertulis atau suara dengan kata kunci */
+    function sdCheck(text, K, minOk, fbEl) {
+      const t = (text || "").toLowerCase();
+      if (t.trim().length < 4) {
+        fbEl.innerHTML = '<div class="fb info">Tulis atau sebutkan jawapan anda dahulu sebelum menyemak.</div>';
+        sd("cadangan", "Cuba nyatakan sekurang-kurangnya satu idea utama berdasarkan kad haiwan.");
+        return false;
+      }
+      const got = K.filter(([, re]) => re.test(t)).map(([k]) => k);
+      const miss = K.filter(([, re]) => !re.test(t)).map(([k]) => k);
+      const good = got.length >= minOk;
+      fbEl.innerHTML = `<div class="fb ${good ? "ok" : "info"}">${good ? pr() + " " : "Hampir tepat. "}Idea betul dikesan: <b>${got.join(", ") || "belum ada"}</b>.${miss.length ? " Idea yang boleh ditambah: <b>" + miss.join(", ") + "</b>." : " Lengkap!"}</div>`;
+      if (good) sd("pujian", `${pr()} Jawapan anda menyentuh: <b>${got.join(", ")}</b>.`);
+      else sd("cadangan", `Cuba lengkapkan jawapan dengan idea: <b>${miss.join(", ")}</b>.`);
+      return good;
+    }
+
+    /* Panel misi (daripada template jawi_2.html) */
+    let MSEL = null;
+    function misUI(el, MIS, done, opt) {
+      opt = opt || {};
+      const n = MIS.filter(m => done[m.id]).length;
+      if (el._n !== n) { el._n = n; MSEL = null; }
+      const cur = MIS.find(m => !done[m.id]), f = MIS.find(m => m.id === MSEL) || cur;
+      let h;
+      if (!f) {
+        h = `<div class="mcur all"><span class="mlab">Semua ${MIS.length} misi selesai ✓</span><b>Tahniah! Teruskan ke Fasa 2 Renung.</b></div>`;
+      } else {
+        const i = MIS.indexOf(f), st = opt.started && opt.started();
+        h = `<div class="mcur ${done[f.id] ? "isdone" : ""}"><span class="mlab">🎯 Misi ${i + 1} daripada ${MIS.length}${done[f.id] ? " · selesai ✓" : f === cur ? " · sedang dibuat" + (f.prog ? " · " + f.prog() : "") : " · belum dibuka"}</span><b class="mt">${f.t}</b>${f.h ? `<p>💡 <b>Cara:</b> ${f.h}</p>` : ""}${!st && opt.start ? `<button class="btn sm mgo" type="button">▶ Mula misi ini</button>` : ""}</div>`;
+      }
+      h += `<div class="mdots" role="group" aria-label="Pilih misi">${MIS.map((m, i) => `<button type="button" class="${done[m.id] ? "done" : ""} ${f && m.id === f.id ? "on" : ""}" data-m="${m.id}" aria-label="Misi ${i + 1}">${i + 1}${done[m.id] ? " ✓" : ""}</button>`).join("")}<span>${n}/${MIS.length} selesai</span></div>`;
+      el.innerHTML = h;
+      el.classList.add("mpanel");
+      el.querySelectorAll("[data-m]").forEach(b => b.onclick = () => { MSEL = b.dataset.m; misUI(el, MIS, done, opt); });
+      const g = el.querySelector(".mgo");
+      if (g) g.onclick = () => { opt.start(); misUI(el, MIS, done, opt); };
+    }
+
+    /* Navigasi 4 fasa */
+    function go(p) {
+      S.phase = p;
+      save();
+      $$(".panel").forEach(x => x.hidden = +x.dataset.p !== p);
+      $$(".phb").forEach(b => {
+        b.setAttribute("aria-current", +b.dataset.p === p);
+        b.classList.toggle("done", !!S.done[b.dataset.p]);
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (p === 0) {
+        renderFound();
+        sd("pencetus", "Fasa 1 (Alami): " + teksMisiSemasa() + " Klik gambar kad atau imbas kad bercetak dengan kamera AR.");
+      } else if (p === 1) {
+        renderRO();
+        sd("pencetus", "Fasa 2 (Renung): Jawab 3 soalan berpandu dan tulis atau sebutkan 1 ayat rumusan berdasarkan kad yang telah diteroka.");
+      } else if (p === 2) {
+        renderAC();
+        sd("pencetus", "Fasa 3 (Faham): Fahami konsep Rangka Dalam, Rangka Luar, dan Rangka Hidrostatik, sebut istilah sains, kemudian jawab Kuiz AI Adaptif.");
+      } else if (p === 3) {
+        renderAE();
+        sd("pencetus", "Fasa 4 (Cuba): Buat ramalan terlebih dahulu pada situasi baharu, kemudian tekan Uji & Semak.");
+      }
+    }
+    $$(".phb").forEach(b => b.onclick = () => go(+b.dataset.p));
+    $$("[data-go]").forEach(b => b.onclick = () => { S.done[S.phase] = true; go(+b.dataset.go); });
+
+    /* =====================================================================
+       FASA 1: ALAMI — INTEGRASI PUSTAKA ArKad & 3 MISI BERURUTAN
+       ===================================================================== */
+    const MIS = [
+      { id: "m1", t: "Teroka mana-mana 3 kad haiwan.", h: "Klik gambar kad atau imbas kad bercetak dengan kamera AR untuk melihat struktur dan sistem sokongannya.", prog: () => `${Math.min(S.found.length, 3)}/3 kad`, ok: () => S.found.length >= 3 },
+      { id: "m2", t: "Cari 2 kad haiwan yang mengalami proses ekdisis (rangka luar).", h: "Perhatikan maklumat pada kad. Pilih dua haiwan invertebrata berangka luar keras yang menyalin kulit (ekdisis).", prog: () => `${Math.min(S.ekdisisFound.length, 2)}/2 haiwan ekdisis`, ok: () => S.found.length >= 3 && S.ekdisisFound.length >= 2 },
+      { id: "m3", t: "Kumpul kesemua 6 kad haiwan.", h: "Semak Koleksi kad haiwan anda dan teroka baki kad yang belum bertanda ✓.", prog: () => `${S.found.length}/6 kad`, ok: () => S.ekdisisFound.length >= 2 && S.found.length >= 6 }
+    ];
+
+    function teksMisiSemasa() {
+      const c = MIS.find(m => !S.mis[m.id]);
+      if (!c) return "✓ Semua 3 misi selesai! Teruskan ke Fasa 2 Renung.";
+      return `Misi ${MIS.indexOf(c) + 1}/3 (${c.prog()}): ${c.t}`;
+    }
+
+    function misBanner() {
+      const c = MIS.find(m => !S.mis[m.id]);
+      $("#tapMission").innerHTML = !c
+        ? "<b>✓ Semua misi selesai!</b> Teruskan ke Fasa 2 Renung."
+        : `<span class="mlab2">Misi ${MIS.indexOf(c) + 1} daripada 3 · ${c.prog()}</span> ${c.t}`;
+    }
+
+    /* Fungsi kongsi untuk ArKad.sediakan.apabilaJumpa dan mod klik tanpa kamera */
+    function apabilaJumpaKad(i) {
+      const o = WORDS[i];
+      if (!o) return;
+      const isNew = !S.found.includes(o.nama);
+
+      if (isNew) {
+        S.found.push(o.nama);
+        star(1);
+      }
+
+      // Semak Misi 2 apabila Misi 1 sudah selesai dan Misi 2 belum selesai
+      if (S.mis.m1 && !S.mis.m2) {
+        if (o.ekdisis) {
+          if (!S.ekdisisFound.includes(o.nama)) {
+            S.ekdisisFound.push(o.nama);
+            star(2);
+            sd("pujian", `✓ Tepat! <b>${o.nama}</b> mempunyai rangka luar dan mengalami ekdisis (salin kulit). +2 ★`);
+          } else {
+            sd("cadangan", `Anda sudah menemui <b>${o.nama}</b>. Cari satu lagi haiwan berangka luar yang mengalami ekdisis.`);
+          }
+        } else {
+          sd("cadangan", `✗ <b>${o.nama}</b> mempunyai <b>${o.labelJenis}</b>, bukan rangka luar. Untuk Misi 2, cari haiwan berangka luar yang mengalami ekdisis.`);
+        }
+      } else {
+        sd("pujian", `${pr()} <b>${o.nama}</b> — ${o.info}`);
+      }
+
+      // Papar kad yang diklik/diimbas di bawah grid
+      $("#tapShow").innerHTML = `
+        <div class="fb ${o.ekdisis || !S.mis.m1 || S.mis.m2 ? "ok" : "info"}" style="text-align:center">
+          <div style="font-size:36px">${o.emoji}</div>
+          <span class="tag-jenis tag-${o.jenis}">${o.labelJenis}</span>
+          <div style="font-size:20px;font-weight:800;margin-top:4px">${o.nama}</div>
+          <div>${o.info}</div>
+        </div>`;
+
+      toast(`${o.emoji} ${o.nama} (${o.labelJenis})`);
+      save();
+      renderFound();
+      lukisGridKlik();
+    }
+
+    function renderFound() {
+      $("#found").innerHTML = WORDS.map(o => {
+        const got = S.found.includes(o.nama);
+        return `<span class="${got ? "got" : ""}">${got ? "✓ " : ""}${o.emoji} ${o.nama}</span>`;
+      }).join("");
+      $("#summary").textContent = `${S.found.length}/6 kad diteroka · ${S.ekdisisFound.length}/2 haiwan ekdisis (rangka luar) ditemui untuk Misi 2`;
+
+      MIS.forEach((m, idx) => {
+        if (!S.mis[m.id] && (idx === 0 || S.mis[MIS[idx - 1].id]) && m.ok()) {
+          S.mis[m.id] = true;
+          star(2);
+          toast(`${pr()} Misi selesai: ${m.t}`);
+          if (idx === 0) award("Peneroka Zoologi");
+          if (idx === 1) award("Pengesan Ekdisis");
+          if (idx === 2) {
+            S.done[0] = true;
+            award("Kolektor Sistem Sokongan");
+          }
+        }
+      });
+
+      misUI($("#missions"), MIS, S.mis, {
+        started: () => !$("#tapWrap").hidden,
+        start: () => $("#tapBtn").click()
+      });
+      misBanner();
+      save();
+    }
+
+    function lukisGridKlik() {
+      let gambar = [];
+      try {
+        if (typeof ArKad !== "undefined" && typeof ArKad.gambarKad === "function") {
+          gambar = ArKad.gambarKad() || [];
+        }
+      } catch (e) { gambar = []; }
+
+      $("#tapGrid").innerHTML = WORDS.map((o, i) => {
+        const got = S.found.includes(o.nama);
+        const src = gambar[i];
+        const media = src
+          ? `<img src="${src}" alt="Kad ${o.nama}" onerror="this.outerHTML='<div class=\\'tap-card-fallback\\'>${o.emoji}</div>'">`
+          : `<div class="tap-card-fallback">${o.emoji}</div>`;
+        return `<button class="tap-card-btn ${got ? "got" : ""}" type="button" data-i="${i}">${media}<span>${got ? "✓ " : ""}${o.nama}</span></button>`;
+      }).join("");
+
+      $$("#tapGrid button").forEach(b => {
+        b.onclick = () => apabilaJumpaKad(+b.dataset.i);
+      });
+    }
+
+    /* Inisialisasi pustaka ArKad */
+    function initArKad() {
+      try {
+        if (typeof ArKad !== "undefined" && typeof ArKad.sediakan === "function") {
+          ArKad.sediakan({
+            kad: WORDS.map(o => ({ nama: o.nama, info: o.info })),
+            apabilaJumpa: (i) => apabilaJumpaKad(i),
+            misi: () => teksMisiSemasa()
+          });
+          if (typeof ArKad.paparKad === "function") {
+            ArKad.paparKad($("#cards"));
+          }
+        }
+      } catch (e) {
+        console.warn("ArKad:", e);
+      }
+    }
+
+    $("#tapBtn").onclick = () => {
+      $("#tapWrap").hidden = false;
+      lukisGridKlik();
+      misBanner();
+      sd("pencetus", "Mod tanpa kamera aktif. Klik mana-mana gambar kad haiwan untuk melihat sistem sokongannya dan selesaikan 3 misi.");
+    };
+
+    $("#startBtn").onclick = () => {
+      sd("pencetus", "Membuka kamera AR... Halakan kamera ke kad bercetak untuk melihat maklumat sistem sokongan di atas kad.");
+      try {
+        if (typeof ArKad !== "undefined" && typeof ArKad.mula === "function") {
+          ArKad.mula();
+        } else {
+          sd("cadangan", "Pustaka ArKad belum dimuatkan. Sila gunakan mod ✋ Tanpa kamera: klik gambar kad.");
+        }
+      } catch (e) {
+        sd("cadangan", "Kamera AR tidak dapat dibuka di sini. Gunakan mod ✋ Tanpa kamera: klik gambar kad.");
+      }
+    };
+
+    /* =====================================================================
+       FASA 2: RENUNG — 3 SOALAN + 1 RUMUSAN (SUARA & TAIP + SEMAKAN KATA KUNCI)
+       ===================================================================== */
+    function renderRO() {
+      $("#roFound").innerHTML = WORDS.map(o => {
+        const got = S.found.includes(o.nama);
+        return `<span class="${got ? "got" : ""}">${got ? "✓ " : "• "}${o.emoji} ${o.nama}</span>`;
+      }).join("");
+    }
+
+    function setupMic(btn, inputEl, statEl, onDoneCheck) {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      btn.onclick = () => {
+        if (!SR) {
+          statEl.textContent = "Pelayar tidak menyokong suara ke teks. Sila taip jawapan dan tekan Semak.";
+          return;
+        }
+        try {
+          const r = new SR();
+          r.lang = "ms-MY";
+          r.interimResults = false;
+          btn.classList.add("on");
+          statEl.textContent = "Mendengar… bercakap sekarang.";
+          r.onresult = e => {
+            const txt = e.results[0][0].transcript;
+            inputEl.value = txt;
+            inputEl.dispatchEvent(new Event("input"));
+            statEl.textContent = "Didengar! Sedang menyemak jawapan anda...";
+            onDoneCheck();
+          };
+          r.onerror = () => {
+            statEl.textContent = "Suara tidak dapat dikesan dengan jelas. Cuba lagi atau taip jawapan.";
+          };
+          r.onend = () => {
+            btn.classList.remove("on");
+          };
+          r.start();
+        } catch (e) {
+          statEl.textContent = "Mikrofon tidak dapat dimulakan di sini. Sila taip jawapan.";
+        }
+      };
+    }
+
+    const RO_SPEC = [
+      {
+        key: "q1", ta: "#roQ1", mic: "#roMic1", btn: "#roChk1", stat: "#roStat1", fb: "#roFb1", min: 2,
+        K: [
+          ["ekdisis / salin kulit", /ekdisis|salin kulit|menyalin kulit/],
+          ["rangka luar keras mengehadkan pembesaran", /mengehadkan|had|pembesaran|membesar|rangka luar keras|keras/]
+        ]
+      },
+      {
+        key: "q2", ta: "#roQ2", mic: "#roMic2", btn: "#roChk2", stat: "#roStat2", fb: "#roFb2", min: 2,
+        K: [
+          ["badan tegar", /tegar/],
+          ["mengekalkan bentuk badan", /bentuk/],
+          ["membantu pergerakan", /gerak|pergerakan/]
+        ]
+      },
+      {
+        key: "q3", ta: "#roQ3", mic: "#roMic3", btn: "#roChk3", stat: "#roStat3", fb: "#roFb3", min: 2,
+        K: [
+          ["tulang / rawan di dalam badan", /tulang|rawan|dalam badan/],
+          ["kitin / cangkerang (lapisan luar keras)", /kitin|cangkerang|lapisan luar|luar keras/]
+        ]
+      },
+      {
+        key: "q4", ta: "#roText", mic: "#roMic", btn: "#roCheck", stat: "#roMicStat", fb: "#roTxtFb", min: 3,
+        K: [
+          ["rangka dalam", /rangka dalam/],
+          ["rangka luar", /rangka luar/],
+          ["rangka hidrostatik", /hidrostatik/],
+          ["fungsi sistem sokongan (berat/bentuk/organ/pergerakan)", /berat|bentuk|organ|lindung|gerak|sokong/]
+        ]
+      }
+    ];
+
+    RO_SPEC.forEach(sp => {
+      const ta = $(sp.ta), fb = $(sp.fb);
+      ta.value = S.roVal[sp.key] || "";
+      ta.oninput = () => { S.roVal[sp.key] = ta.value; save(); };
+      const checkFn = () => {
+        const ok = sdCheck(ta.value, sp.K, sp.min, fb);
+        if (ok && !S.roDone[sp.key]) {
+          S.roDone[sp.key] = true;
+          star(1);
+          if (Object.keys(S.roDone).length >= 4) {
+            S.done[1] = true;
+            award("Penganalisis Reflektif");
+          }
+          save();
+        }
+      };
+      $(sp.btn).onclick = checkFn;
+      setupMic($(sp.mic), ta, $(sp.stat), checkFn);
+    });
+
+    /* =====================================================================
+       FASA 3: FAHAM — SEBUTAN ISTILAH + KUIZ AI ADAPTIF (AIAdaptif.kuiz)
+       ===================================================================== */
+    const TERMS = ["rangka dalam", "rangka luar", "rangka hidrostatik", "ekdisis", "kitin", "tekanan bendalir", "tapak perlekatan otot"];
+    let selTerm = TERMS[0];
+    let quizInitDone = false;
+
+    const BANK_SOALAN = [
+      // 3 Mudah (lvl 1)
+      {
+        lvl: 1, c: "rangka_dalam",
+        t: "Rangka dalam terbina daripada struktur apakah di dalam badan?",
+        o: ["Tulang atau rawan", "Kitin atau cangkerang", "Bendalir dalam rongga badan", "Dinding berotot sahaja"],
+        a: "Tulang atau rawan",
+        h: "Imbas semula maklumat pada kad kucing dan ikan."
+      },
+      {
+        lvl: 1, c: "rangka_luar",
+        t: "Antara haiwan berikut, manakah yang mempunyai rangka luar?",
+        o: ["Ketam", "Katak", "Cacing tanah", "Burung"],
+        a: "Ketam",
+        h: "Pilih haiwan invertebrata yang mempunyai lapisan luar keras."
+      },
+      {
+        lvl: 1, c: "rangka_hidrostatik",
+        t: "Haiwan berbadan lembut seperti cacing tanah dan lintah disokong oleh jenis rangka apakah?",
+        o: ["Rangka hidrostatik", "Rangka dalam", "Rangka luar", "Rangka rawan"],
+        a: "Rangka hidrostatik",
+        h: "Rangka ini menggunakan bendalir yang terkurung di dalam rongga badan."
+      },
+      // 3 Sederhana (lvl 2)
+      {
+        lvl: 2, c: "rangka_luar",
+        t: "Lapisan luar keras pada rangka luar serangga, ketam, dan udang terdiri daripada apakah?",
+        o: ["Kitin atau cangkerang", "Tulang atau rawan", "Bendalir dan dinding berotot", "Otot dan tulang lembut"],
+        a: "Kitin atau cangkerang",
+        h: "Ingat dua bahan keras yang membentuk lapisan luar invertebrata."
+      },
+      {
+        lvl: 2, c: "rangka_dalam",
+        t: "Selain menyokong berat badan, melindungi organ dalaman, dan mengekalkan bentuk badan, apakah satu lagi fungsi khusus rangka dalam?",
+        o: ["Menjadi tapak perlekatan otot", "Mengalami proses ekdisis", "Menghasilkan tekanan bendalir ke semua arah", "Membentuk cangkerang luar yang keras"],
+        a: "Menjadi tapak perlekatan otot",
+        h: "Otot badan melekat pada tulang atau rawan untuk membolehkan pergerakan."
+      },
+      {
+        lvl: 2, c: "rangka_hidrostatik",
+        t: "Bagaimanakah rangka hidrostatik mengekalkan bentuk badan haiwan berbadan lembut?",
+        o: ["Tekanan bendalir ke semua arah menjadikan badan tegar", "Cangkerang keras melindungi bahagian luar", "Tulang di dalam badan menjadi tapak perlekatan otot", "Haiwan menyalin kulit keras secara berkala"],
+        a: "Tekanan bendalir ke semua arah menjadikan badan tegar",
+        h: "Fikirkan peranan bendalir terkurung yang dikelilingi dinding berotot."
+      },
+      // 3 Sukar (lvl 3)
+      {
+        lvl: 3, c: "rangka_luar",
+        t: "Mengapakah haiwan berangka luar seperti udang dan labah-labah perlu mengalami proses ekdisis (salin kulit)?",
+        o: ["Kerana rangka luar yang keras mengehadkan pembesaran badan", "Kerana bendalir di dalam rongga badan berkurangan", "Kerana tulang di dalam badan menjadi semakin panjang", "Kerana dinding berotot perlu diganti untuk menjadi tegar"],
+        a: "Kerana rangka luar yang keras mengehadkan pembesaran badan",
+        h: "Kaitkan sifat rangka luar yang keras dengan proses pertumbuhan haiwan."
+      },
+      {
+        lvl: 3, c: "rangka_dalam",
+        t: "Ikan, ketam, dan obor-obor semuanya hidup di dalam air. Manakah padanan jenis sistem sokongan yang TEPAT bagi ketiga-tiga haiwan tersebut?",
+        o: [
+          "Ikan: rangka dalam; Ketam: rangka luar; Obor-obor: rangka hidrostatik",
+          "Ikan: rangka luar; Ketam: rangka dalam; Obor-obor: rangka hidrostatik",
+          "Ikan: rangka hidrostatik; Ketam: rangka luar; Obor-obor: rangka dalam",
+          "Semuanya mempunyai rangka hidrostatik"
+        ],
+        a: "Ikan: rangka dalam; Ketam: rangka luar; Obor-obor: rangka hidrostatik",
+        h: "Bezakan antara haiwan vertebrata, invertebrata bercangkerang/kitin, dan haiwan berbadan lembut."
+      },
+      {
+        lvl: 3, c: "rangka_hidrostatik",
+        t: "Kumpulan haiwan manakah yang KESEMUANYA bergantung pada bendalir terkurung dalam rongga badan dikelilingi dinding berotot?",
+        o: ["Cacing tanah, lintah, dan obor-obor", "Cacing tanah, serangga, dan labah-labah", "Lintah, katak, dan ikan", "Obor-obor, udang, dan ketam"],
+        a: "Cacing tanah, lintah, dan obor-obor",
+        h: "Pilih kumpulan yang hanya terdiri daripada haiwan berbadan lembut."
+      }
+    ];
+
+    const PEMBETULAN = {
+      rangka_dalam: {
+        t: "Ulang Kaji: Rangka Dalam",
+        d: "Terbina daripada tulang atau rawan di dalam badan. Dimiliki oleh semua vertebrata (manusia, kucing, ikan, burung, katak). Fungsinya: menyokong berat badan, melindungi organ dalaman, mengekalkan bentuk badan, dan menjadi tapak perlekatan otot."
+      },
+      rangka_luar: {
+        t: "Ulang Kaji: Rangka Luar",
+        d: "Lapisan luar keras daripada kitin atau cangkerang bagi kebanyakan invertebrata (serangga, ketam, udang, labah-labah). Haiwan ini mengalami ekdisis (salin kulit) kerana rangka luar yang keras mengehadkan pembesaran badan."
+      },
+      rangka_hidrostatik: {
+        t: "Ulang Kaji: Rangka Hidrostatik",
+        d: "Bendalir terkurung dalam rongga badan yang dikelilingi dinding berotot bagi haiwan berbadan lembut (cacing tanah, lintah, obor-obor). Tekanan bendalir ke semua arah menjadikan badan tegar untuk mengekalkan bentuk dan membantu pergerakan."
+      }
+    };
+
+    function renderTermPills() {
+      $("#termOpts").innerHTML = TERMS.map(t => `<button type="button" class="opt ${t === selTerm ? "sel" : ""}" data-t="${t}">${S.termsOk.includes(t) ? "✓ " : ""}${t}</button>`).join("");
+      $$("#termOpts .opt").forEach(b => {
+        b.onclick = () => {
+          selTerm = b.dataset.t;
+          $("#termInput").value = "";
+          $("#readFb").innerHTML = "";
+          renderTermPills();
+          sd("pencetus", `Istilah sasaran dipilih: <b>${selTerm}</b>. Tekan 🎤 Sebut sekarang atau taip dan tekan Semak istilah.`);
+        };
+      });
+    }
+
+    function semakSebutanIstilah() {
+      const val = ($("#termInput").value || "").trim().toLowerCase();
+      if (!val) {
+        $("#readFb").innerHTML = `<div class="fb info">Sila sebut atau taip istilah sasaran <b>${selTerm}</b> dahulu.</div>`;
+        sd("cadangan", `Cuba sebut atau taip <b>${selTerm}</b>.`);
+        return;
+      }
+      const tepat = val === selTerm || val.includes(selTerm);
+      if (tepat) {
+        $("#readFb").innerHTML = `<div class="fb ok">${pr()} Sebutan / ejaan tepat bagi istilah sasaran: <b>${selTerm}</b>.</div>`;
+        sd("pujian", `${pr()} Sebutan anda bagi <b>${selTerm}</b> sangat tepat.`);
+        if (!S.termsOk.includes(selTerm)) {
+          S.termsOk.push(selTerm);
+          star(1);
+          save();
+          renderTermPills();
+        }
+      } else {
+        $("#readFb").innerHTML = `<div class="fb bad">Yang dikesan: "<b>${val}</b>". Istilah sasaran ialah <b>${selTerm}</b>. Cuba sebut atau taip sekali lagi dengan jelas.</div>`;
+        sd("cadangan", `Belum tepat. Bandingkan "${val}" dengan istilah sasaran <b>${selTerm}</b> dan cuba lagi.`);
+      }
+    }
+
+    $("#termCheckBtn").onclick = semakSebutanIstilah;
+    setupMic($("#readBtn"), $("#termInput"), $("#readStat"), semakSebutanIstilah);
+
+    function renderAC() {
+      renderTermPills();
+      if (!quizInitDone) {
+        quizInitDone = true;
+        try {
+          if (typeof AIAdaptif !== "undefined" && typeof AIAdaptif.kuiz === "function") {
+            AIAdaptif.kuiz("#kuizAI", {
+              soalan: BANK_SOALAN,
+              pembetulan: PEMBETULAN,
+              jumlah: 8,
+              mesej: (jenis, teks) => {
+                const j = String(jenis || "").toLowerCase();
+                let mapped = "pencetus";
+                if (j.includes("puji") || j.includes("betul")) mapped = "pujian";
+                else if (j.includes("cadang") || j.includes("petunjuk") || j.includes("salah")) mapped = "cadangan";
+                else if (j.includes("ganjar") || j.includes("tamat") || j.includes("lencana")) {
+                  mapped = "ganjaran";
+                  star(2);
+                  S.done[2] = true;
+                  award("Pakar Sistem Sokongan");
+                } else if (j.includes("ingat")) mapped = "peringatan";
+                sd(mapped, teks);
+              }
+            });
+          }
+        } catch (e) {
+          console.warn("AIAdaptif.kuiz:", e);
+        }
+      }
+    }
+
+    /* =====================================================================
+       FASA 4: CUBA — 3 SITUASI BAHARU + AIAdaptif.tahap() & AIAdaptif.rekod()
+       ===================================================================== */
+    let cubaT0 = Date.now();
+    let cubaHints = { 1: 0, 2: 0, 3: 0 };
+
+    function bukaCabaran(n) {
+      cubaT0 = Date.now();
+      $$("#cubaTabs button").forEach(b => b.setAttribute("aria-pressed", +b.dataset.c === n));
+      [1, 2, 3].forEach(k => $("#cuba" + k).hidden = k !== n);
+    }
+    $$("#cubaTabs button").forEach(b => b.onclick = () => bukaCabaran(+b.dataset.c));
+
+    function lukisCuba1() {
+      $("#cuba1Rows").innerHTML = WORDS.map(o => {
+        const p = S.cuba1Pick[o.nama] || "";
+        return `<div class="sort-row">
+          <strong>${o.emoji} ${o.nama}</strong>
+          <div class="row">
+            <button type="button" class="opt ${p === "rangka_dalam" ? "sel" : ""}" data-n="${o.nama}" data-v="rangka_dalam">🦴 Rangka Dalam</button>
+            <button type="button" class="opt ${p === "rangka_luar" ? "sel" : ""}" data-n="${o.nama}" data-v="rangka_luar">🦀 Rangka Luar</button>
+            <button type="button" class="opt ${p === "rangka_hidrostatik" ? "sel" : ""}" data-n="${o.nama}" data-v="rangka_hidrostatik">🪱 Rangka Hidrostatik</button>
+          </div>
+        </div>`;
+      }).join("");
+      $$("#cuba1Rows .opt").forEach(b => {
+        b.onclick = () => {
+          S.cuba1Pick[b.dataset.n] = b.dataset.v;
+          save();
+          lukisCuba1();
+        };
+      });
+    }
+
+    function rekodCubaAI(ok, cNo, concept) {
+      const secs = Math.max(1, Math.round((Date.now() - cubaT0) / 1000));
+      try {
+        if (typeof AIAdaptif !== "undefined" && typeof AIAdaptif.rekod === "function") {
+          AIAdaptif.rekod({ ok: ok, hints: cubaHints[cNo] || 0, secs: secs, exp: 20, concept: concept });
+        }
+      } catch (e) { console.warn("AIAdaptif.rekod:", e); }
+      cubaT0 = Date.now();
+    }
+
+    $("#c1Hint").onclick = () => {
+      cubaHints[1]++;
+      sd("cadangan", "Ingat: setiap sistem sokongan mempunyai 2 haiwan dalam 6 kad — vertebrata (Rangka Dalam), invertebrata berkulit keras (Rangka Luar), dan berbadan lembut (Rangka Hidrostatik).");
+    };
+    $("#c2Hint").onclick = () => {
+      cubaHints[2]++;
+      sd("cadangan", "Kaitkan dengan kumpulan haiwan dalam nota: burung ialah vertebrata, labah-labah ialah invertebrata berangka luar, dan lintah ialah haiwan berbadan lembut.");
+    };
+    $("#c3Hint").onclick = () => {
+      cubaHints[3]++;
+      sd("cadangan", "Semak semula salah faham biasa: rangka luar keras mengehadkan pembesaran (perlu ekdisis), manakala haiwan berbadan lembut tetap mempunyai rangka hidrostatik.");
+    };
+
+    $("#c1Check").onclick = () => {
+      const belum = WORDS.filter(o => !S.cuba1Pick[o.nama]);
+      if (belum.length) {
+        $("#c1Fb").innerHTML = '<div class="fb info">Sila buat ramalan untuk kesemua 6 kad haiwan dahulu.</div>';
+        sd("cadangan", "Lengkapkan pilihan sistem sokongan bagi semua 6 haiwan sebelum menekan Uji & Semak.");
+        return;
+      }
+      const salah = WORDS.filter(o => S.cuba1Pick[o.nama] !== o.jenis);
+      const ok = salah.length === 0;
+      rekodCubaAI(ok, 1, "rangka_dalam");
+      if (ok) {
+        $("#c1Fb").innerHTML = `<div class="fb ok">${pr()} Semua 6 kad haiwan telah dikelaskan dengan tepat ke dalam Rangka Dalam, Rangka Luar, dan Rangka Hidrostatik.</div>`;
+        sd("pujian", `${pr()} Pengelasan sistem sokongan bagi kesemua 6 haiwan tepat sekali.`);
+        if (!S.cubaDone[1]) { S.cubaDone[1] = true; star(3); semakTamatCuba(); }
+      } else {
+        $("#c1Fb").innerHTML = `<div class="fb bad">Terdapat ${salah.length} haiwan perlu disemak semula: <b>${salah.map(s => s.nama).join(", ")}</b>.</div>`;
+        sd("cadangan", "Semak semula struktur badan haiwan tersebut — tulang/rawan, kitin/cangkerang, atau bendalir dalam rongga badan?");
+      }
+      kemasKiniBukti();
+    };
+
+    $("#c2Check").onclick = () => {
+      const aT = $("#c2aType").value, aF = $("#c2aFeat").value;
+      const bT = $("#c2bType").value, bF = $("#c2bFeat").value;
+      const cT = $("#c2cType").value, cF = $("#c2cFeat").value;
+      if (!aT || !aF || !bT || !bF || !cT || !cF) {
+        $("#c2Fb").innerHTML = '<div class="fb info">Sila lengkapkan sistem sokongan dan ciri utama bagi ketiga-tiga haiwan baharu dahulu.</div>';
+        sd("cadangan", "Pastikan Burung, Labah-labah, dan Lintah mempunyai kedua-dua pilihan sebelum menyemak.");
+        return;
+      }
+      const okA = aT === "rangka_dalam" && aF === "tulang";
+      const okB = bT === "rangka_luar" && bF === "kitin";
+      const okC = cT === "rangka_hidrostatik" && cF === "bendalir";
+      const ok = okA && okB && okC;
+      rekodCubaAI(ok, 2, "rangka_luar");
+      if (ok) {
+        $("#c2Fb").innerHTML = `<div class="fb ok">${pr()} Profil bagi Burung (Rangka Dalam), Labah-labah (Rangka Luar), dan Lintah (Rangka Hidrostatik) tepat sekali!</div>`;
+        sd("pujian", `${pr()} Anda berjaya memindahkan pengetahuan kad kepada tiga haiwan baharu daripada nota.`);
+        if (!S.cubaDone[2]) { S.cubaDone[2] = true; star(3); semakTamatCuba(); }
+      } else {
+        const ks = [!okA && "Burung", !okB && "Labah-labah", !okC && "Lintah"].filter(Boolean).join(", ");
+        $("#c2Fb").innerHTML = `<div class="fb bad">Semak semula padanan sistem sokongan atau ciri utama bagi: <b>${ks}</b>.</div>`;
+        sd("cadangan", "Bandingkan Burung dengan Kucing/Ikan, Labah-labah dengan Ketam/Serangga, dan Lintah dengan Cacing tanah/Obor-obor.");
+      }
+      kemasKiniBukti();
+    };
+
+    $("#c3Check").onclick = () => {
+      const aTf = $("#c3aTf").value, aEv = $("#c3aEv").value;
+      const bTf = $("#c3bTf").value, bEv = $("#c3bEv").value;
+      const cTf = $("#c3cTf").value, cEv = $("#c3cEv").value;
+      if (!aTf || !aEv || !bTf || !bEv || !cTf || !cEv) {
+        $("#c3Fb").innerHTML = '<div class="fb info">Sila pilih Benar/Palsu dan Kad bukti bagi ketiga-tiga kes.</div>';
+        sd("cadangan", "Pastikan setiap kes mempunyai ramalan Benar/Palsu dan kad bukti yang menyokongnya.");
+        return;
+      }
+      const okA = aTf === "palsu" && aEv === "ketam_serangga";
+      const okB = bTf === "palsu" && bEv === "obor_cacing";
+      const okC = cTf === "benar" && cEv === "kucing_ikan";
+      const ok = okA && okB && okC;
+      rekodCubaAI(ok, 3, "rangka_hidrostatik");
+      if (ok) {
+        $("#c3Fb").innerHTML = `<div class="fb ok">${pr()} Semua 3 kes Detektif Sains dan kad buktinya tepat!</div>`;
+        sd("pujian", `${pr()} Anda berjaya menyangkal salah faham tentang ekdisis dan rangka hidrostatik menggunakan bukti kad.`);
+        if (!S.cubaDone[3]) { S.cubaDone[3] = true; star(4); semakTamatCuba(); }
+      } else {
+        const ks = [!okA && "Kes A", !okB && "Kes B", !okC && "Kes C"].filter(Boolean).join(", ");
+        $("#c3Fb").innerHTML = `<div class="fb bad">Semak semula ramalan atau kad bukti bagi: <b>${ks}</b>.</div>`;
+        sd("cadangan", "Fikirkan: ketam perlu ekdisis kerana cangkerang keras mengehadkan pembesaran; obor-obor mempunyai rangka hidrostatik.");
+      }
+      kemasKiniBukti();
+    };
+
+    function semakTamatCuba() {
+      if (S.cubaDone[1] && S.cubaDone[2] && S.cubaDone[3]) {
+        S.done[3] = true;
+        award("Detektif Zoologi Tingkatan 4");
+      }
+      save();
+    }
+
+    function kemasKiniBukti() {
+      $("#evCards").textContent = `${S.found.length}/6`;
+      $("#evRef").textContent = `${Object.keys(S.roDone).length}/4`;
+      $("#evRead").textContent = S.termsOk.length;
+      $("#evCuba").textContent = `${Object.keys(S.cubaDone).length}/3`;
+      $$("#cubaTabs button").forEach(b => b.classList.toggle("done", !!S.cubaDone[+b.dataset.c]));
+    }
+
+    function renderAE() {
+      lukisCuba1();
+      let lvl = 1;
+      try {
+        if (typeof AIAdaptif !== "undefined" && typeof AIAdaptif.tahap === "function") {
+          const t = AIAdaptif.tahap();
+          if (t && t.lvl) lvl = t.lvl;
+        }
+      } catch (e) { lvl = 1; }
+      const namaAras = lvl === 1 ? "Situasi 1 (Mudah)" : lvl === 2 ? "Situasi 2 (Sederhana)" : "Situasi 3 (Sukar)";
+      $("#cubaSuggest").innerHTML = `<span class="sd sd-ai">AI Adaptif</span> Cadangan untuk tahap penguasaan anda (<span class="qaras a${lvl}">Aras ${lvl}</span>): mulakan dengan <b>${namaAras}</b>. Anda juga boleh mencuba ketiga-tiga situasi.`;
+      $$("#cubaTabs button").forEach(b => b.classList.toggle("rec", +b.dataset.c === lvl));
+      bukaCabaran(lvl);
+      kemasKiniBukti();
+    }
+
+    /* =====================================================================
+       BUTANG MULA SEMULA (2 KALI TEKAN DALAM 4 SAAT) + NAVIGASI BAWAH PANEL
+       ===================================================================== */
+    (function () {
+      const R = $("#resetAll");
+      let armT = null;
+      R.addEventListener("click", () => {
+        if (!R.classList.contains("warn")) {
+          R.classList.add("warn");
+          R.textContent = "Tekan lagi untuk padam semua";
+          clearTimeout(armT);
+          armT = setTimeout(() => {
+            R.classList.remove("warn");
+            R.textContent = "🔄 Mula semula";
+          }, 4000);
+          return;
+        }
+        clearTimeout(armT);
+        try {
+          (R.dataset.key || "").split(",").forEach(k => { k = k.trim(); if (k) localStorage.removeItem(k); });
+          if (typeof AIAdaptif !== "undefined" && typeof AIAdaptif.setSemula === "function") {
+            AIAdaptif.setSemula();
+          }
+        } catch (e) {}
+        location.reload();
+      });
+
+      // Navigasi bawah setiap panel fasa (daripada jawi_2.html)
+      const N = ["Alami", "Renung", "Faham", "Cuba"];
+      $$(".panel[data-p]").forEach(p => {
+        const i = +p.dataset.p;
+        const d = document.createElement("div");
+        d.className = "pnav";
+        d.innerHTML = (i > 0 ? `<button class="btn ghost" type="button" data-nav="${i - 1}">← ${i} ${N[i - 1]}</button>` : "") +
+          '<span class="sp"></span>' +
+          (i < 3 ? `<button class="btn" type="button" data-nav="${i + 1}">${i + 2} ${N[i + 1]} →</button>` : "");
+        p.appendChild(d);
+      });
+      $$("[data-nav]").forEach(b => {
+        const pan = b.closest(".panel"), n = +b.dataset.nav;
+        const old = pan && n > +pan.dataset.p ? pan.querySelector('[data-go="' + n + '"]') : null;
+        if (old && old.parentElement && old.parentElement.classList.contains("row") && old.parentElement.children.length === 1) old.parentElement.hidden = true;
+        b.addEventListener("click", () => { if (old) old.click(); else go(n); });
+      });
+    })();
+
+    /* Peringatan 25 saat tiada tindakan bagi semua 4 fasa */
+    sdIdle(() => {
+      if (S.phase === 0) {
+        const c = MIS.find(m => !S.mis[m.id]);
+        return c ? "Masih di situ? Teruskan misi anda: " + c.t : null;
+      }
+      if (S.phase === 1) return "Jangan lupa jawab soalan Renung (taip atau guna 🎤 Cakap), kemudian tekan Semak.";
+      if (S.phase === 2) return "Cuba sebut satu istilah sains atau teruskan menjawab Kuiz AI Adaptif.";
+      return "Buat ramalan pada situasi Cuba, kemudian tekan butang Uji & Semak.";
+    });
+
+    /* Mula aplikasi */
+    $("#stars").textContent = "★ " + S.stars;
+    badgeUI();
+    initArKad();
+    renderFound();
+    go(S.phase || 0);
+  </script>
+</body>
+</html>
